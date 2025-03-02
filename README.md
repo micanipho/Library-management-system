@@ -1,160 +1,176 @@
-# Library Management System (LMS) Specification
+# Library Management System (LMS) - Spring Boot API
 
-## 1. Introduction
-The Library Management System (LMS) is a software application designed to manage the operations of a library. It allows librarians to manage books, users, and borrowing/returning processes efficiently. The system will be developed in Java and will include a console-based interface for interaction.
+Welcome to the Library Management System (LMS) project! This is a Spring Boot-based RESTful API designed to manage books, users, and borrowing/returning processes in a library. The system provides endpoints for adding, updating, deleting, and searching books and users, as well as handling book borrowing and returning operations.
 
----
+## Table of Contents
 
-## 2. Objectives
-- Simplify book and user management.
-- Track book borrowing and returning processes.
-- Provide a user-friendly interface for librarians and users.
-- Ensure data persistence by saving book and user information to files.
+- [Features](#features)
+- [Technologies Used]()
+- [Project Structure]()
+- [API Endpoints]()
+- [Setup and Installation]()
+- [Database Configuration]()
+- [Running the Application]()
+- [Testing the API]()
+- [Future Enhancements]()
 
----
+## Features
 
-## 3. Functional Requirements
+### Book Management:
 
-### 3.1 Book Management
-- **Add a Book**:
-  - Librarians can add new books to the library.
-  - Each book will have the following attributes:
-    - Title
-    - Author
-    - ISBN (unique identifier)
-    - Availability status (available/borrowed)
-- **Update a Book**:
-  - Librarians can update book details (e.g., title, author).
-- **Delete a Book**:
-  - Librarians can remove a book from the library using its ISBN.
-- **Search for a Book**:
-  - Users can search for a book by its ISBN, title, or author.
-- **List All Books**:
-  - Display a list of all books in the library.
+- Add, update, delete, and search books.
+- Track book availability (available/borrowed).
 
-### 3.2 User Management
-- **Add a User**:
-  - Librarians can add new users (students or librarians).
-  - Each user will have the following attributes:
-    - Name
-    - User ID (unique identifier)
-    - Contact Information
-- **Update a User**:
-  - Librarians can update user details (e.g., name, contact information).
-- **Delete a User**:
-  - Librarians can remove a user from the system using their User ID.
-- **List All Users**:
-  - Display a list of all users.
+### User Management:
 
-### 3.3 Borrowing and Returning Books
-- **Borrow a Book**:
-  - Users can borrow a book if it is available.
-  - The system will update the book's availability status to "borrowed."
-- **Return a Book**:
-  - Users can return a borrowed book.
-  - The system will update the book's availability status to "available."
-- **Track Due Dates**:
-  - The system will track the due date for borrowed books.
-- **Calculate Fines**:
-  - If a book is returned after the due date, the system will calculate a fine.
+- Add, update, and delete users.
+- Borrow and return books.
+- Track due dates and calculate fines for late returns.
+### Data Persistence:
 
-### 3.4 Data Persistence
-- **Save Data**:
-  - Book and user data will be saved to files (e.g., `books.dat`, `users.dat`).
-- **Load Data**:
-  - The system will load book and user data from files when the program starts.
+- Uses PostgreSQL for storing book and user data.
+- RESTful API:
+  - Provides endpoints for all operations.
 
-### 3.5 User Interface
-- **Console-Based Interface**:
-  - A menu-driven interface will allow users to interact with the system.
-  - Options will include:
-    - Add/Update/Delete/Search Books
-    - Add/Update/Delete Users
-    - Borrow/Return Books
-    - Exit the System
+## Technologies Used
 
----
+- Spring Boot: Backend framework for building the REST API.
+- Spring Data JPA: For database operations and persistence.
+- PostgreSQL: Relational database for storing data.
+- Maven: Dependency management and build tool.
+- Postman: For testing API endpoints.
 
-## 4. Non-Functional Requirements
-- **Performance**:
-  - The system should handle up to 10,000 books and 1,000 users efficiently.
-- **Usability**:
-  - The console interface should be intuitive and easy to use.
-- **Reliability**:
-  - Data should not be lost in case of unexpected program termination.
-- **Scalability**:
-  - The system should be designed to allow future enhancements (e.g., GUI, database integration).
+## Project Structure
 
----
+src/main/java  
+└── com.Library_management_system  
+├── controller  
+│   ├── BookController.java  
+│   └── UserController.java  
+├── model  
+│   ├── Book.java  
+│   └── User.java  
+├── repository  
+│   ├── BookRepository.interface  
+│   └── UserRepository.interface  
+├── service  
+│   ├── BookService.java  
+│   └── UserService.java  
+└── LibraryManagementSystemApplication.java  
 
-## 5. System Design
+## API Endpoints
+### Book Management
 
-### 5.1 Class Diagram
+- GET   /api/books (Get all books.)  
+- GET	/api/books/{Id} (Get a book by Id.) 
+- GET	/api/books/search (Search books by title or author.)  
+- POST	/api/books	(Add a new book.)    
+- PUT	/api/books/{Id} (Update a book by Id)  
+- DELETE	/api/books/{isbn} (Delete a book by Id.)  
 
-+-----------------+       +-----------------+       +-----------------+
-|      Book       |       |      User       |       |     Library     |
-+-----------------+       +-----------------+       +-----------------+
-| - title: String |       | - name: String  |       | - books: List   |
-| - author: String|       | - userId: String|       | - users: List   |
-| - isbn: String  |       | - contactInfo:  |       +-----------------+
-| - isAvailable:  |       |   String        |       | + addBook()     |
-|   boolean       |       +-----------------+       | + removeBook()  |
-+-----------------+       | + getName()     |       | + searchBook()  |
-| + getTitle()    |       | + getUserId()   |       | + addUser()     |
-| + getAuthor()   |       | + getContactInfo|       | + removeUser()  |
-| + getIsbn()     |       +-----------------+       | + borrowBook()  |
-| + isAvailable() |                                 | + returnBook()  |
-+-----------------+                                 +-----------------+
+### User Management
+- GET	/api/users	(Get all users.)
+- GET	/api/users/{userId}	(Get a user by ID.)
+- POST	/api/users	(Add a new user.)
+- PUT	/api/users/{userId}	(Update a user by ID.)
+- DELETE	/api/users/{userId}	(Delete a user by ID.)
 
+### Borrowing and Returning
 
-### 5.2 Data Storage
-- **Books**:
-  - Stored in a file named `books.dat`.
-  - Serialized using Java's `ObjectOutputStream`.
-- **Users**:
-  - Stored in a file named `users.dat`.
-  - Serialized using Java's `ObjectOutputStream`.
+- POST	/api/books/borrow	(Borrow a book.)
+- POST	/api/books/return	(Return a book.)
 
----
+## Setup and Installation
 
-## 6. Technology Stack
-- **Programming Language**: Java
-- **File Handling**: Java I/O (ObjectInputStream, ObjectOutputStream)
-- **User Interface**: Console-based (Scanner for input)
-- **Testing**: JUnit (for unit testing)
+### Prerequisites
 
----
+    Java 21 or higher.
 
-## 7. Future Enhancements
-1. **Graphical User Interface (GUI)**:
-   - Use JavaFX or Swing to create a more user-friendly interface.
-2. **Database Integration**:
-   - Replace file storage with a database like MySQL or SQLite.
-3. **User Authentication**:
-   - Add a login system for librarians and users.
-4. **Advanced Search**:
-   - Allow searching by multiple criteria (e.g., genre, publication year).
-5. **Email Notifications**:
-   - Send email reminders for due dates.
+    Maven 3.x.
 
----
+    PostgreSQL installed and running.
 
-## 8. Testing Plan
-- **Unit Testing**:
-  - Test individual methods (e.g., `addBook`, `borrowBook`).
-- **Integration Testing**:
-  - Test the interaction between classes (e.g., `Library` and `Book`).
-- **User Acceptance Testing (UAT)**:
-  - Ensure the system meets the requirements of librarians and users.
+    An IDE (e.g., IntelliJ IDEA, Eclipse).
 
----
+### Steps
 
-## 9. Deliverables
-1. **Source Code**:
-   - Java classes for `Book`, `User`, `Library`, and `Main`.
-2. **Data Files**:
-   - `books.dat` and `users.dat` for storing data.
-3. **Documentation**:
-   - User manual for operating the system.
-   - Developer documentation for future enhancements.
+Clone the Repository:
+```angular2html
+    git clone https://github.com/your-username/library-management-system.git
+    cd library-management-system
+```
+Build the Project:
+```bash
+    mvn clean install
+```
+Run the Application:
+```bash
+    mvn spring-boot:run
 
+```
+Access the API:
+
+     The API will be available at http://localhost:8080.
+
+## Database Configuration
+
+Add the following configuration to the application.properties file to connect to your PostgreSQL database:
+properties
+
+### PostgreSQL Configuration
+```angular2html
+spring.datasource.url=jdbc:postgresql://localhost:5432/lmsdb
+spring.datasource.username=your-username
+spring.datasource.password=your-password
+spring.datasource.driver-class-name=org.postgresql.Driver
+```
+
+### Hibernate Configuration
+
+```angular2html
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+```
+Replace your-username and your-password with your PostgreSQL credentials.
+
+## Running the Application
+
+Start the application using the command:
+```bash
+    mvn spring-boot:run
+```
+Use Postman or any API testing tool to interact with the endpoints.
+
+## Testing the API
+
+Use Postman or cURL to test the API endpoints.
+
+### Example requests:
+
+Add a Book:
+```bash
+        curl -X POST http://localhost:8080/api/books \
+        -H "Content-Type: application/json" \
+        -d '{"title": "The Great Gatsby", "author": "F. Scott Fitzgerald", "isbn": "9780743273565"}'
+```
+Borrow a Book:
+```bash
+        curl -X POST http://localhost:8080/api/books/borrow \
+        -H "Content-Type: application/json" \
+        -d '{"userId": "1", "isbn": "9780743273565"}'
+```
+## Future Enhancements
+
+### User Authentication:
+
+- Add JWT-based authentication for secure access.
+
+###    Frontend Integration:
+
+- Develop a React or Angular frontend for a complete web application.
+
+###  Email Notifications:
+- Send email reminders for due dates and fines.
+### Advanced Search:
+Add filters for searching books by genre, publication year, etc.

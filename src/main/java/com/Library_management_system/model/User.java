@@ -1,7 +1,21 @@
 package com.Library_management_system.model;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "library_user")
 public class User {
 
+    @Id
+    @SequenceGenerator(
+            name = "user_sequence",
+            sequenceName = "user_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "user_sequence"
+    )
     private int userId;
     private String username;
     private String contactInfo;
@@ -16,7 +30,7 @@ public class User {
         this.type = type;
     }
 
-    public User(String type, String contactInfo, String username) {
+    public User( String username, String contactInfo, String type) {
         this.type = type;
         this.contactInfo = contactInfo;
         this.username = username;

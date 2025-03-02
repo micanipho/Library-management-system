@@ -53,6 +53,8 @@ src/main/java
 ├── repository  
 │   ├── BookRepository.interface  
 │   └── UserRepository.interface  
+│   └── UserConfig.java  
+│   └── BookConfig.java    
 ├── service  
 │   ├── BookService.java  
 │   └── UserService.java  
@@ -61,24 +63,24 @@ src/main/java
 ## API Endpoints
 ### Book Management
 
-- GET   /api/books (Get all books.)  
-- GET	/api/books/{Id} (Get a book by Id.) 
-- GET	/api/books/search (Search books by title or author.)  
-- POST	/api/books	(Add a new book.)    
-- PUT	/api/books/{Id} (Update a book by Id)  
-- DELETE	/api/books/{isbn} (Delete a book by Id.)  
+- GET   /lms/api/v1/books (Get all books.)  
+- GET	/lms/api/v1/books/{Id} (Get a book by Id.) 
+- GET	/lms/api/v1/books/search (Search books by title or author.)  
+- POST	/lms/api/v1/books	(Add a new book.)    
+- PUT	/lms/api/v1/books/{Id} (Update a book by Id)  
+- DELETE /lms/api/v1/books/{isbn} (Delete a book by Id.)  
 
 ### User Management
-- GET	/api/users	(Get all users.)
-- GET	/api/users/{userId}	(Get a user by ID.)
-- POST	/api/users	(Add a new user.)
-- PUT	/api/users/{userId}	(Update a user by ID.)
-- DELETE	/api/users/{userId}	(Delete a user by ID.)
+- GET	/lms/api/v1/users	(Get all users.)
+- GET	/lms/api/v1/users/{userId}	(Get a user by ID.)
+- POST	/lms/api/v1/users	(Add a new user.)
+- PUT	/lms/api/v1/users/{userId}	(Update a user by ID.)
+- DELETE /lms/api/v1/users/{userId}	(Delete a user by ID.)
 
 ### Borrowing and Returning
 
-- POST	/api/books/borrow	(Borrow a book.)
-- POST	/api/books/return	(Return a book.)
+- POST	/lms/api/v1/books/borrow	(Borrow a book.)
+- POST	/lms/api/v1/books/return	(Return a book.)
 
 ## Setup and Installation
 

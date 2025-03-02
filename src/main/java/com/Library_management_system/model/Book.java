@@ -18,7 +18,7 @@ public class Book {
             strategy = GenerationType.SEQUENCE,
             generator = "book_sequence"
     )
-    private int bookId;
+    private Long bookId;
     private String title;
     private String author;
     private boolean isAvailable;
@@ -33,14 +33,14 @@ public class Book {
         this.isAvailable = isAvailable;
     }
 
-    public Book(boolean isAvailable, String author, String title, int bookId) {
+    public Book(boolean isAvailable, String author, String title, Long bookId) {
         this.isAvailable = isAvailable;
         this.author = author;
         this.title = title;
         this.bookId = bookId;
     }
 
-    public Book(int bookId, String title, String author, boolean isAvailable, LocalDate date) {
+    public Book(Long bookId, String title, String author, boolean isAvailable, LocalDate date) {
         this.bookId = bookId;
         this.title = title;
         this.author = author;
@@ -48,11 +48,11 @@ public class Book {
         this.date = date;
     }
 
-    public int getBookId() {
+    public Long getBookId() {
         return bookId;
     }
 
-    public void setBookId(int bookId) {
+    public void setBookId(Long bookId) {
         this.bookId = bookId;
     }
 

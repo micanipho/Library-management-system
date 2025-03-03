@@ -22,7 +22,8 @@ public class Book {
     private String title;
     private String author;
     private boolean isAvailable;
-    private LocalDate date;
+    private LocalDate dateBorrowed;
+    private LocalDate dateReturned;
 
     public Book() {
     }
@@ -40,12 +41,12 @@ public class Book {
         this.bookId = bookId;
     }
 
-    public Book(Long bookId, String title, String author, boolean isAvailable, LocalDate date) {
+    public Book(Long bookId, String title, String author, boolean isAvailable, LocalDate dateBorrowed) {
         this.bookId = bookId;
         this.title = title;
         this.author = author;
         this.isAvailable = isAvailable;
-        this.date = date;
+        this.dateBorrowed = dateBorrowed;
     }
 
     public Long getBookId() {
@@ -80,12 +81,12 @@ public class Book {
         isAvailable = available;
     }
 
-    public LocalDate getDate() {
-        return date;
+    public LocalDate getDateBorrowed() {
+        return dateBorrowed;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
+    public void setDateBorrowed(LocalDate date) {
+        this.dateBorrowed = date;
     }
 
     @Override
@@ -95,7 +96,7 @@ public class Book {
                 ", title='" + title + '\'' +
                 ", author='" + author + '\'' +
                 ", isAvailable=" + isAvailable +
-                ", date=" + date +
+                ", date=" + dateBorrowed +
                 '}';
     }
 }

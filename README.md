@@ -64,11 +64,11 @@ src/main/java
 ### Book Management
 
 - GET   /lms/api/v1/books (Get all books.)  
-- GET	/lms/api/v1/books/{Id} (Get a book by Id.) 
+- GET	/lms/api/v1/books/{bookId} (Get a book by Id.) 
 - GET	/lms/api/v1/books/search (Search books by title or author.)  
 - POST	/lms/api/v1/books	(Add a new book.)    
-- PUT	/lms/api/v1/books/{Id} (Update a book by Id)  
-- DELETE /lms/api/v1/books/{isbn} (Delete a book by Id.)  
+- PUT	/lms/api/v1/books/{bookId} (Update a book by Id)  
+- DELETE /lms/api/v1/books/{bookId} (Delete a book by Id.)  
 
 ### User Management
 - GET	/lms/api/v1/users	(Get all users.)

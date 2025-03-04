@@ -24,12 +24,10 @@ public class BookController {
         }
 
         @GetMapping(path = "search")
-        public List<Book> searchBook(
-                @RequestParam(required = false) String title,
-                @RequestParam(required = false) String author) {
+        public Book searchBook(@RequestParam("title") String title,
+                           @RequestParam("author") String author) {
             return bookService.searchBook(title, author);
         }
-
         @GetMapping(path = "{bookId}")
         public Book getBookById(@PathVariable("bookId") Long bookId) {
             return bookService.getBook(bookId);
@@ -41,15 +39,13 @@ public class BookController {
         }
 
         @PostMapping(path = "borrow")
-        public void borrowBook(@RequestBody Book book,
-                               @RequestParam String email) {
-            bookService.borrowBook(book, email);
+        public void borrowBook(@RequestBody Book book) {
+            bookService.borrowBook(book);
         }
 
         @PostMapping(path = "return")
-        public void returnBook(@RequestBody Book book,
-                               @RequestParam String email) {
-            bookService.returnBook(book, email);
+        public void returnBook(@RequestBody Book book) {
+            bookService.returnBook(book);
         }
 
         @DeleteMapping(path = "{bookId}")

@@ -26,7 +26,13 @@ public class User {
     @OneToMany
     private List<Book> borrowedBooks;
 
+    public List<Book> getBorrowedBooks() {
+        return borrowedBooks;
+    }
 
+    public void addBorrowedBooks(Book book) {
+        this.borrowedBooks.add(book);
+    }
 
     public User() {
     }
@@ -35,14 +41,14 @@ public class User {
         this.username = username;
         this.email = email;
         this.type = type;
-        this.borrowedBooks = new ArrayList<>();
+        borrowedBooks = new ArrayList<>();
     }
 
     public User(String username, String email, String type) {
         this.type = type;
         this.email = email;
         this.username = username;
-        this.borrowedBooks = new ArrayList<>();
+        borrowedBooks = new ArrayList<>();
     }
 
     public Long getUserId() {
@@ -76,16 +82,6 @@ public class User {
     public void setType(String type) {
         this.type = type;
     }
-    public List<Book> getBorrowedBooks() {
-        return this.borrowedBooks;
-    }
-
-    public void addBorrowedBooks(Book book) {
-        this.borrowedBooks.add(book);
-    }
-    public void removeBorrowedBook(Book bookToReturn) {
-        borrowedBooks.remove(bookToReturn);
-    }
 
     @Override
     public String toString() {
@@ -94,7 +90,6 @@ public class User {
                 ", username='" + username + '\'' +
                 ", contactInfo='" + email + '\'' +
                 ", type='" + type + '\'' +
-                ", borrowedBooks=" + this.borrowedBooks +
                 '}';
     }
 }

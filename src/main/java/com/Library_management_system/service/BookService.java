@@ -1,9 +1,7 @@
 package com.Library_management_system.service;
 
 import com.Library_management_system.model.Book;
-import com.Library_management_system.model.User;
 import com.Library_management_system.repository.BookRepository;
-import com.Library_management_system.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,12 +14,10 @@ import java.util.Optional;
 @Service
 public class BookService {
     private final BookRepository bookRepository;
-    private final UserRepository userRepository;
 
     @Autowired
-    public BookService(BookRepository bookRepository, UserRepository userRepository) {
+    public BookService(BookRepository bookRepository) {
         this.bookRepository = bookRepository;
-        this.userRepository = userRepository;
     }
 
 
@@ -52,61 +48,30 @@ public class BookService {
         );
     }
 
-    public List<Book> searchBook(String title, String author) {
-        if (title != null && author != null) {
-            return bookRepository.findByTitleAndAuthor(title, author).map(List::of)
-                    .orElseThrow(() -> new IllegalStateException("Book not found"));
-        } else if (title != null) {
-            return bookRepository.findBookByTitle(title).map(List::of).orElseThrow(
-                    () -> new IllegalStateException("Book with title "+ title +" not found")
-            );
-        } else if (author != null) {
-            return bookRepository.findBookByAuthor(author).map(List::of).orElseThrow(
-                    () -> new IllegalStateException("Book with author "+ author +" not found")
-            );
-        } else {
-            return bookRepository.findAll();
-        }
+    public Book searchBook(String title, String author) {
+        return bookRepository.findByTitleAndAuthor(title, author).orElseThrow(
+                () -> new IllegalStateException("Book with title " + title + "and author " +
+                        author + " does not exist.")
+        );
     }
 
 
     @Transactional
-    public void borrowBook(Book book, String email) {
-        Book bookToBorrow = bookRepository.findByTitleAndAuthor(book.getTitle(), book.getAuthor())
-                .orElseThrow(() -> new IllegalStateException("Book not found"));
-
-        User user = userRepository.findByEmail(email).orElseThrow(
-                () -> new IllegalStateException("User with email " + email + " not found")
+    public void borrowBook(Book book) {
+        Book bookToBorrow = bookRepository.findByTitleAndAuthor(book.getTitle(), book.getAuthor()).orElseThrow(
+                () -> new IllegalStateException("Book with id " + book.getBookId() + " does not exist")
         );
-
-        if (!bookToBorrow.isAvailable()) {
-            throw new IllegalStateException("Book is already borrowed");
-        }
-
-
-        bookToBorrow.setAvailable(false);
         bookToBorrow.setDateBorrowed(LocalDate.now());
-        bookToBorrow.setDateReturned(LocalDate.now().plusWeeks(1));
-        user.addBorrowedBooks(bookToBorrow);
+        bookToBorrow.setAvailable(false);
     }
 
     @Transactional
-    public void returnBook(Book book, String email) {
-        Book bookToReturn = bookRepository.findByTitleAndAuthor(book.getTitle(), book.getAuthor())
-                .orElseThrow(() -> new IllegalStateException("Book not found"));
-
-        User user = userRepository.findByEmail(email).orElseThrow(
-                () -> new IllegalStateException("User with email " + email + " not found")
+    public void returnBook(Book book) {
+        Book bookToReturn = bookRepository.findByTitleAndAuthor(book.getTitle(), book.getAuthor()).orElseThrow(
+                () -> new IllegalStateException("Book with id " + book.getBookId() + " does not exist")
         );
-
-        if (bookToReturn.isAvailable()) {
-            throw new IllegalStateException("Book is already returned");
-        }
-
-
-        user.removeBorrowedBook(bookToReturn);
         bookToReturn.setAvailable(true);
-        bookToReturn.setDateBorrowed(null);
-        bookToReturn.setDateReturned(null);
+
+
     }
 }

@@ -25,6 +25,14 @@ public class Book {
     private LocalDate dateBorrowed;
     private LocalDate dateReturned;
 
+    public LocalDate getDateReturned() {
+        return dateReturned;
+    }
+
+    public void setDateReturned(LocalDate dateReturned) {
+        this.dateReturned = dateReturned;
+    }
+
     public Book() {
     }
 
@@ -47,6 +55,7 @@ public class Book {
         this.author = author;
         this.isAvailable = isAvailable;
         this.dateBorrowed = dateBorrowed;
+
     }
 
     public Long getBookId() {

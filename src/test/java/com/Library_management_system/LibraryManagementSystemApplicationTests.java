@@ -10,4 +10,9 @@ class LibraryManagementSystemApplicationTests {
 	void contextLoads() {
 	}
 
+	@Test
+	void Test1() {
+
+	}
+
 }

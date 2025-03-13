@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.User;
@@ -13,8 +14,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
+import static com.Library_management_system.security.ApplicationUserRole.*;
+
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class ApplicationSecurityConfig {
 
 
@@ -44,13 +48,15 @@ public class ApplicationSecurityConfig {
         UserDetails user = User.builder()
                 .username("nipho")
                 .password(passwordEncoder.encode("test"))
-                .roles(ApplicationUserRole.ADMIN.name())
+                    .roles(ADMIN.name())
+                .authorities(ADMIN.getGrantedAuthorities())
                 .build();
 
         UserDetails user1 = User.builder()
                 .username("lee")
                 .password(passwordEncoder.encode("test"))
-                .roles(ApplicationUserRole.STUDENT.name())
+                    .roles(STUDENT.name())
+                .authorities(STUDENT.getGrantedAuthorities())
                 .build();
         return new InMemoryUserDetailsManager(user, user1);
     }

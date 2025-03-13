@@ -9,7 +9,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
@@ -45,13 +44,13 @@ public class ApplicationSecurityConfig {
         UserDetails user = User.builder()
                 .username("nipho")
                 .password(passwordEncoder.encode("test"))
-                .roles("ADMIN")
+                .roles(ApplicationUserRole.ADMIN.name())
                 .build();
 
         UserDetails user1 = User.builder()
                 .username("lee")
                 .password(passwordEncoder.encode("test"))
-                .roles("STUDENT")
+                .roles(ApplicationUserRole.STUDENT.name())
                 .build();
         return new InMemoryUserDetailsManager(user, user1);
     }

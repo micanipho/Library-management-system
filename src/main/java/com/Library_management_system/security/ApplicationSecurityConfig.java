@@ -48,14 +48,12 @@ public class ApplicationSecurityConfig {
         UserDetails user = User.builder()
                 .username("nipho")
                 .password(passwordEncoder.encode("test"))
-                    .roles(ADMIN.name())
                 .authorities(ADMIN.getGrantedAuthorities())
                 .build();
 
         UserDetails user1 = User.builder()
                 .username("lee")
                 .password(passwordEncoder.encode("test"))
-                    .roles(STUDENT.name())
                 .authorities(STUDENT.getGrantedAuthorities())
                 .build();
         return new InMemoryUserDetailsManager(user, user1);

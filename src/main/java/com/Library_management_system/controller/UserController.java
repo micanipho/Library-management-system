@@ -21,7 +21,7 @@ public class UserController {
     }
 
     @GetMapping
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('user:write')")
     public List<User> getUsers() {
        return userService.getUsers();
     }

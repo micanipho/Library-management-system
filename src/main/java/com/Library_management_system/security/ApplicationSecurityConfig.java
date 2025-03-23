@@ -1,13 +1,19 @@
 package com.Library_management_system.security;
 
+import com.Library_management_system.auth.ApplicationUserDao;
+import com.Library_management_system.auth.ApplicationUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -33,31 +39,28 @@ public class ApplicationSecurityConfig {
                                 .requestMatchers("/admin/**", "/", "index.html").permitAll()
                                 .anyRequest().authenticated()
                 )
-                .httpBasic(Customizer.withDefaults());
+                .formLogin(form -> form
+                        .loginPage("/login").permitAll()
+                        .defaultSuccessUrl("/home", true)
+                );
 
         return http.build();
     }
 
     private final PasswordEncoder passwordEncoder;
+    private final ApplicationUserService applicationUserService;
 
     @Autowired
-    public ApplicationSecurityConfig(PasswordEncoder passwordEncoder) {
+    public ApplicationSecurityConfig(PasswordEncoder passwordEncoder, ApplicationUserService applicationUserService) {
         this.passwordEncoder = passwordEncoder;
+        this.applicationUserService = applicationUserService;
     }
 
     @Bean
-    protected UserDetailsService userDetailsService(){
-        UserDetails user = User.builder()
-                .username("nipho")
-                .password(passwordEncoder.encode("test"))
-                .authorities(ADMIN.getGrantedAuthorities())
-                .build();
-
-        UserDetails user1 = User.builder()
-                .username("lee")
-                .password(passwordEncoder.encode("test"))
-                .authorities(STUDENT.getGrantedAuthorities())
-                .build();
-        return new InMemoryUserDetailsManager(user, user1);
+    public DaoAuthenticationProvider daoAuthenticationProvider() {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setPasswordEncoder(passwordEncoder);
+        provider.setUserDetailsService(applicationUserService);
+        return provider;
     }
 }

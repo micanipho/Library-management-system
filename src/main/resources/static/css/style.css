@@ -1,0 +1,17 @@
+body {
+    font-family: sans-serif;
+    margin: 20px;
+}
+
+h2 {
+    margin-top: 20px;
+}
+
+#books-container, #search-results, #add-result, #borrow-result, #return-result {
+    margin-top: 10px;
+}
+
+input, button {
+    margin: 5px;
+    padding: 8px;
+}

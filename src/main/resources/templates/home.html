@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Management System</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 20px;
+        }
+
+        h2 {
+            margin-top: 20px;
+        }
+
+        #books-container, #search-results, #add-result, #borrow-result, #return-result {
+            margin-top: 10px;
+        }
+
+        input, button {
+            margin: 5px;
+            padding: 8px;
+        }
+    </style>
+</head>
+<body>
+<h1>Library Management System</h1>
+
+<div id="book-list">
+    <h2>Books</h2>
+    <button id="get-all-books">Get All Books</button>
+    <div id="books-container"></div>
+</div>
+
+<div id="book-search">
+    <h2>Search Books</h2>
+    <input type="text" id="search-input" placeholder="Title or Author">
+    <button id="search-books">Search</button>
+    <div id="search-results"></div>
+</div>
+
+<div id="book-add">
+    <h2>Add Book</h2>
+    <input type="text" id="add-title" placeholder="Title">
+    <input type="text" id="add-author" placeholder="Author">
+    <button id="add-book">Add</button>
+    <div id="add-result"></div>
+</div>
+
+<div id="book-borrow">
+    <h2>Borrow Book</h2>
+    <input type="text" id="borrow-book-id" placeholder="Book ID">
+    <button id="borrow-book">Borrow</button>
+    <div id="borrow-result"></div>
+</div>
+
+<div id="book-return">
+    <h2>Return Book</h2>
+    <input type="text" id="return-book-id" placeholder="Book ID">
+    <button id="return-book">Return</button>
+    <div id="return-result"></div>
+</div>
+
+<script>
+    const API_BASE_URL = '/lms/api/v1';
+
+    document.getElementById('get-all-books').addEventListener('click', () => {
+        fetch(`${API_BASE_URL}/books`)
+            .then(response => response.json())
+            .then(data => {
+                const booksContainer = document.getElementById('books-container');
+                booksContainer.innerHTML = '';
+                data.forEach(book => {
+                    booksContainer.innerHTML += `<p>${book.title} by ${book.author} (ID: ${book.bookId})</p>`;
+                });
+            });
+    });
+
+    document.getElementById('search-books').addEventListener('click', () => {
+        const searchTerm = document.getElementById('search-input').value;
+        fetch(`${API_BASE_URL}/books/search`,{
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ title: searchTerm })
+        })
+            .then(response => response.json())
+            .then(data => {
+                const searchResults = document.getElementById('search-results');
+                searchResults.innerHTML = '';
+                data.forEach(book => {
+                    searchResults.innerHTML += `<p>${book.title} by ${book.author} (ID: ${book.bookId})</p>`;
+                });
+            });
+    });
+
+    document.getElementById('add-book').addEventListener('click', () => {
+        const title = document.getElementById('add-title').value;
+        const author = document.getElementById('add-author').value;
+        fetch(`${API_BASE_URL}/books`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ title, author })
+        })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('add-result').textContent = `Book added: ${title}`;
+            });
+    });
+
+    document.getElementById('borrow-book').addEventListener('click', () => {
+        const bookId = document.getElementById('borrow-book-id').value;
+        fetch(`${API_BASE_URL}/books/borrow`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ bookId })
+        })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('borrow-result').textContent = `Book ${data.body} borrowed`;
+            });
+    });
+
+    document.getElementById('return-book').addEventListener('click', () => {
+        const bookId = document.getElementById('return-book-id').value;
+        fetch(`${API_BASE_URL}/books/return`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ bookId })
+        })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('return-result').textContent = `Book ${data} returned`;
+            });
+    });
+</script>
+</body>
+</html>

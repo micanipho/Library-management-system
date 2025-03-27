@@ -10,14 +10,11 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-
+import java.util.*;
+import java.util.stream.Collectors;
 
 @EqualsAndHashCode
-@NoArgsConstructor(force = true)
+@NoArgsConstructor
 @Setter
 @Getter
 @Entity
@@ -35,32 +32,30 @@ public class ApplicationUser implements UserDetails {
             generator = "user_sequence"
     )
     private Long id;
+
     private String firstName;
     private String lastName;
     private String email;
     private String password;
-    @Enumerated(EnumType.STRING)
-    private ApplicationUserRole applicationUserRole;
+    @Enumerated(EnumType.STRING)  // Store roles as Strings in the DB
+    private ApplicationUserRole role;
     @OneToMany
-    private List<Book> borrowedBooks;
+    private List<Book> borrowedBooks = new ArrayList<>();
     private boolean locked = false;
     private boolean isEnabled = true;
 
     public ApplicationUser(String firstName, String lastName, String email, String password,
-                           ApplicationUserRole applicationUserRole) {
+                           ApplicationUserRole role) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
-        this.applicationUserRole = applicationUserRole;
-        this.borrowedBooks = new ArrayList<>();
+        this.role = role;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        assert applicationUserRole != null;
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(applicationUserRole.name());
-        return Collections.singletonList(authority);
+        return role.getGrantedAuthorities();
     }
 
     @Override
@@ -78,6 +73,7 @@ public class ApplicationUser implements UserDetails {
         return true;
     }
 
+    @Override
     public boolean isAccountNonLocked() {
         return !locked;
     }
@@ -91,5 +87,4 @@ public class ApplicationUser implements UserDetails {
     public boolean isEnabled() {
         return isEnabled;
     }
-
 }

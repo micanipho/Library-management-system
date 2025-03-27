@@ -6,6 +6,11 @@ import com.Library_management_system.service.ApplicationUserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Set;
+
+import static com.Library_management_system.security.ApplicationUserRole.ADMIN;
+import static com.Library_management_system.security.ApplicationUserRole.STUDENT;
+
 @Service
 @AllArgsConstructor
 public class RegistrationService {
@@ -25,7 +30,7 @@ public class RegistrationService {
                         request.getLastName(),
                         request.getEmail(),
                         request.getPassword(),
-                        ApplicationUserRole.STUDENT
+                        ADMIN
                 )
         );
     }

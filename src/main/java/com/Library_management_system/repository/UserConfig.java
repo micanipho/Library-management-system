@@ -6,9 +6,20 @@ import com.Library_management_system.service.ApplicationUserService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.Set;
+
+import static com.Library_management_system.security.ApplicationUserRole.ADMIN;
 
 @Configuration
 public class UserConfig {
+
+    private final PasswordEncoder passwordEncoder;
+
+    public UserConfig(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Bean
     CommandLineRunner commandLineRunner(ApplicationUserDao applicationUserDao) {
@@ -17,8 +28,8 @@ public class UserConfig {
                     "Nhlakanipho",
                     "Masilela",
                     "admin@gmail.com",
-                    "admin",
-                    ApplicationUserRole.ADMIN
+                    passwordEncoder.encode("admin"),
+                    ADMIN
             );
             applicationUserDao.save(user);
         };

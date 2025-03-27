@@ -1,8 +1,6 @@
 package com.Library_management_system.auth;
 
-import com.Library_management_system.model.ApplicationUser;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

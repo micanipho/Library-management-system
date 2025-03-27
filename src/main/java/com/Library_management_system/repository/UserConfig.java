@@ -1,29 +1,26 @@
 package com.Library_management_system.repository;
 
-import com.Library_management_system.model.User;
+import com.Library_management_system.model.ApplicationUser;
+import com.Library_management_system.security.ApplicationUserRole;
+import com.Library_management_system.service.ApplicationUserService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.List;
-
 @Configuration
 public class UserConfig {
-    @Bean
-    CommandLineRunner commandLineRunner(UserRepository userRepository) {
-        return args -> {
-         User nipho = new User(
-              "Nipho",
-              "0636639970",
-              "student"
-          );
 
-         User khosi = new User(
-                 "khosi",
-                 "0795755795",
-                 "student"
-         );
-         userRepository.saveAll(List.of(nipho, khosi));
+    @Bean
+    CommandLineRunner commandLineRunner(ApplicationUserDao applicationUserDao) {
+        return args -> {
+            ApplicationUser user = new ApplicationUser(
+                    "Nhlakanipho",
+                    "Masilela",
+                    "admin@gmail.com",
+                    "admin",
+                    ApplicationUserRole.ADMIN
+            );
+            applicationUserDao.save(user);
         };
     }
 }

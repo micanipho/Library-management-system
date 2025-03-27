@@ -15,12 +15,13 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-@Getter
-@Setter
+
 @EqualsAndHashCode
 @NoArgsConstructor(force = true)
+@Setter
+@Getter
 @Entity
-@Table
+@Table(name = "users")
 public class ApplicationUser implements UserDetails {
 
     @Id
@@ -34,29 +35,24 @@ public class ApplicationUser implements UserDetails {
             generator = "user_sequence"
     )
     private Long id;
-    private final String username;
-    private final String password;
+    private String firstName;
+    private String lastName;
+    private String email;
+    private String password;
     @Enumerated(EnumType.STRING)
-    private final ApplicationUserRole applicationUserRole;
-    private String type;
+    private ApplicationUserRole applicationUserRole;
     @OneToMany
     private List<Book> borrowedBooks;
-    private boolean isAccountNonExpired;
-    private boolean isAccountNonLocked;
-    private boolean isCredentialsNonExpired;
-    private boolean isEnabled;
+    private boolean locked = false;
+    private boolean isEnabled = true;
 
-    public ApplicationUser(String username, String password, ApplicationUserRole applicationUserRole, String type,
-                           boolean isAccountNonExpired, boolean isAccountNonLocked,
-                           boolean isCredentialsNonExpired, boolean isEnabled) {
-        this.username = username;
+    public ApplicationUser(String firstName, String lastName, String email, String password,
+                           ApplicationUserRole applicationUserRole) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
         this.password = password;
         this.applicationUserRole = applicationUserRole;
-        this.type = type;
-        this.isAccountNonExpired = isAccountNonExpired;
-        this.isAccountNonLocked = isAccountNonLocked;
-        this.isCredentialsNonExpired = isCredentialsNonExpired;
-        this.isEnabled = isEnabled;
         this.borrowedBooks = new ArrayList<>();
     }
 
@@ -74,26 +70,26 @@ public class ApplicationUser implements UserDetails {
 
     @Override
     public String getUsername() {
-        return username;
+        return email;
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return isAccountNonExpired;
+        return true;
     }
 
-    @Override
     public boolean isAccountNonLocked() {
-        return isAccountNonLocked;
+        return !locked;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return isCredentialsNonExpired;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
         return isEnabled;
     }
+
 }

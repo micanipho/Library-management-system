@@ -26,7 +26,7 @@ public class ApplicationSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/admin/**", "/", "index.html", "lms/api/v*/registration/**").permitAll()
+                                .requestMatchers("/admin/**", "/", "index.html", "/lms/api/v1/registration").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

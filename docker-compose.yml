@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    environment:
+      POSTGRES_USER: nipho
+      POSTGRES_PASSWORD: micasa
+      POSTGRES_DB: lmsdb
+    ports:
+      - "5433:5432"
+    networks:
+      - lms-network
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: library-management-system
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/lmsdb
+      SPRING_DATASOURCE_USERNAME: nipho
+      SPRING_DATASOURCE_PASSWORD: micasa
+      SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop
+      APPLICATION_JWT_SECRETKEY: securesecuresecuresecuresecuresecuresecuresecure
+      APPLICATION_JWT_TOKENPREFIX: Bearer
+      APPLICATION_JWT_TOKENEXPIRATIONAFTERDAYS: 14
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    networks:
+      - lms-network
+
+networks:
+  lms-network:
+    driver: bridge
